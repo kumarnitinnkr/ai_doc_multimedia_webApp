@@ -18,7 +18,7 @@ services:
     depends_on:
       - mysql
     environment:
-      OPENAI_API_KEY: YOUR_API_KEY
+      openai.api.key=${OPENAI_API_KEY:test}
     ports:
       - "8080:8080"
 
