@@ -3,7 +3,7 @@ import axios from "axios";
 import "./App.css";
 
 function App() {
-  const baseUrl = "http://localhost:8080";
+  const baseUrl = https://ai-doc-backend-e69k.onrender.com;
 
   const [file, setFile] = useState(null);
   const [fileId, setFileId] = useState("");
