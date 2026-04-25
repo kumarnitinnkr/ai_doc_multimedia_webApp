@@ -21,44 +21,67 @@ public class FileService {
 
     public MediaFile upload(MultipartFile file) throws Exception {
 
-    File dir = new File("C:/uploads");
-    if (!dir.exists()) dir.mkdirs();
+        File dir = new File(
+                System.getProperty("java.io.tmpdir"),
+                "uploads"
+        );
 
-    String uniqueName =
-            UUID.randomUUID() + "_" + file.getOriginalFilename();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
 
-    File destination = new File(dir, uniqueName);
+        String uniqueName =
+                UUID.randomUUID() + "_" +
+                file.getOriginalFilename();
 
-    file.transferTo(destination);
+        File destination =
+                new File(dir, uniqueName);
 
-    String extracted = "";
+        file.transferTo(destination);
 
-    if (file.getContentType() != null &&
-            file.getContentType().contains("pdf")) {
+        String extracted = "";
 
-        PDDocument document =
-                Loader.loadPDF(destination);
+        if (file.getContentType() != null &&
+                file.getContentType()
+                        .contains("pdf")) {
 
-        PDFTextStripper stripper =
-                new PDFTextStripper();
+            PDDocument document =
+                    Loader.loadPDF(destination);
 
-        extracted = stripper.getText(document);
-        document.close();
+            PDFTextStripper stripper =
+                    new PDFTextStripper();
+
+            extracted =
+                    stripper.getText(document);
+
+            document.close();
+        }
+
+        MediaFile saved = MediaFile.builder()
+                .fileName(uniqueName)
+                .originalName(
+                        file.getOriginalFilename()
+                )
+                .fileType(
+                        resolveType(
+                                file.getContentType()
+                        )
+                )
+                .contentType(
+                        file.getContentType()
+                )
+                .fileSize(file.getSize())
+                .filePath(
+                        destination.getAbsolutePath()
+                )
+                .extractedText(extracted)
+                .uploadedAt(
+                        LocalDateTime.now()
+                )
+                .build();
+
+        return repository.save(saved);
     }
-
-    MediaFile saved = MediaFile.builder()
-            .fileName(uniqueName)
-            .originalName(file.getOriginalFilename())
-            .fileType(resolveType(file.getContentType()))
-            .contentType(file.getContentType())
-            .fileSize(file.getSize())
-            .filePath(destination.getAbsolutePath())
-            .extractedText(extracted)
-            .uploadedAt(LocalDateTime.now())
-            .build();
-
-    return repository.save(saved);
-}
 
     private String resolveType(String type) {
 
