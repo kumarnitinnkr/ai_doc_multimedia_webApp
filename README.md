@@ -6,6 +6,11 @@ This project is a full-stack web application that allows users to upload PDF doc
 
 Users can also generate summaries, search timestamps for specific topics in multimedia files, and play the relevant section directly.
 
+## My project is live on Render: 
+
+Frontend: [https://ai-doc-frontend-7gom.onrender.com]
+Backend: [https://ai-doc-backend-e69k.onrender.com]
+
 ---
 
 ## Features
@@ -135,7 +140,6 @@ Docker Support
 CI/CD Workflow
 Functional Frontend + Backend
 Database Integration
-
 
 ## Future Enhancements
 Real-time chat streaming
