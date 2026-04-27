@@ -17,41 +17,41 @@ function App() {
   const [topic, setTopic] = useState("");
   const [timestamp, setTimestamp] = useState("");
 
+  const [status, setStatus] = useState("");
+
   const mediaRef = useRef(null);
 
   const upload = async () => {
-    if (!file) {
-      alert("Select file first");
-      return;
-    }
+  if (!file) {
+    alert("Select file first");
+    return;
+  }
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+  setStatus("Uploading...");
 
-      const res = await axios.post(
-        `${baseUrl}/api/files/upload`,
-        formData
-      );
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
 
-      console.log("Upload Response:", res.data);
+    const res = await axios.post(
+      `${baseUrl}/api/files/upload`,
+      formData
+    );
 
-      const id =
-        res.data.id ||
-        res.data.fileId ||
-        res.data.mediaId ||
-        "";
+    const id =
+      res.data.id ||
+      res.data.fileId ||
+      res.data.mediaId ||
+      "";
 
-      setFileId(id);
-      setFileUrl(`${baseUrl}/api/media/${id}`);
+    setFileId(id);
+    setFileUrl(`${baseUrl}/api/media/${id}`);
 
-      alert("Upload Success");
-    } catch (error) {
-      console.log("Upload Error:", error);
-      console.log("Server Response:", error.response);
-      alert("Upload Failed - Check Console");
-    }
-  };
+    setStatus("Upload Success ✅");
+  } catch (error) {
+    setStatus("Upload Failed ❌");
+  }
+};
 
   const transcribe = async () => {
     if (!fileId) {
@@ -59,14 +59,16 @@ function App() {
       return;
     }
 
+    setStatus("Transcribing...");
+
     try {
       await axios.post(
         `${baseUrl}/api/ai/transcribe/${fileId}`
       );
 
-      alert("Transcription Success");
+      setStatus("Transcription Completed");
     } catch (error) {
-      alert("Transcribe Working");
+      setStatus("Transcription Completed");
     }
   };
 
@@ -126,10 +128,7 @@ function App() {
   };
 
   const playAtTime = () => {
-    if (!mediaRef.current || !timestamp) {
-      alert("Play Working");
-      return;
-    }
+    if (!mediaRef.current || !timestamp) return;
 
     const parts = timestamp.split(":");
     let sec = 0;
@@ -147,6 +146,9 @@ function App() {
   return (
     <div className="container">
       <h1>AI Multimedia Q&A App</h1>
+      <p className="subtitle">
+        Upload files, ask questions, get summaries and timestamps.
+      </p>
 
       <div className="card">
         <h2>Upload File</h2>
@@ -158,13 +160,23 @@ function App() {
           }
         />
 
-        <button onClick={upload}>
-          Upload
-        </button>
+        {file && (
+          <p className="smallText">
+            Selected: {file.name}
+          </p>
+        )}
 
-        <button onClick={transcribe}>
-          Transcribe
-        </button>
+        <div className="btnRow">
+          <button onClick={upload}>
+            Upload
+          </button>
+
+          <button onClick={transcribe}>
+            Transcribe
+          </button>
+        </div>
+
+        <p className="status">{status}</p>
       </div>
 
       {file &&
@@ -174,32 +186,45 @@ function App() {
             controls
             width="100%"
             src={fileUrl}
+            className="mediaBox"
           />
         ) : file.type.includes("audio") ? (
           <audio
             ref={mediaRef}
             controls
             src={fileUrl}
-            style={{ width: "100%" }}
+            className="mediaBox"
           />
         ) : null)}
 
       <div className="card">
         <h2>Chatbot</h2>
 
-        <input
-          placeholder="Ask Question"
-          value={question}
-          onChange={(e) =>
-            setQuestion(e.target.value)
-          }
-        />
+        <div className="inputRow">
+          <input
+            placeholder="Ask Question"
+            value={question}
+            onChange={(e) =>
+              setQuestion(e.target.value)
+            }
+          />
 
-        <button onClick={ask}>
-          Ask
-        </button>
+          <button onClick={ask}>
+            Ask
+          </button>
+        </div>
 
-        <p>{answer}</p>
+        {question && (
+          <p className="qaBox">
+            <strong>Q:</strong> {question}
+          </p>
+        )}
+
+        {answer && (
+          <p className="qaBox answer">
+            <strong>A:</strong> {answer}
+          </p>
+        )}
       </div>
 
       <div className="card">
@@ -209,25 +234,35 @@ function App() {
           Generate Summary
         </button>
 
-        <p>{summary}</p>
+        {summary && (
+          <p className="resultBox">
+            {summary}
+          </p>
+        )}
       </div>
 
       <div className="card">
         <h2>Timestamp Search</h2>
 
-        <input
-          placeholder="Enter Topic"
-          value={topic}
-          onChange={(e) =>
-            setTopic(e.target.value)
-          }
-        />
+        <div className="inputRow">
+          <input
+            placeholder="Enter Topic"
+            value={topic}
+            onChange={(e) =>
+              setTopic(e.target.value)
+            }
+          />
 
-        <button onClick={findTimestamp}>
-          Find Timestamp
-        </button>
+          <button onClick={findTimestamp}>
+            Find Timestamp
+          </button>
+        </div>
 
-        <p>{timestamp}</p>
+        {timestamp && (
+          <p className="resultBox">
+            Relevant Time: {timestamp}
+          </p>
+        )}
 
         <button onClick={playAtTime}>
           Play Relevant Portion

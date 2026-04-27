@@ -54,7 +54,7 @@ public class AiService {
     file.setExtractedText(sample);
     repository.save(file);
 
-    return "Transcript Stored";
+    return sample;
 }
 
     public String ask(Long fileId, String question) {

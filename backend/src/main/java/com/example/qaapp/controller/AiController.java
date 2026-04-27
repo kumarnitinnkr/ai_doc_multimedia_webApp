@@ -4,20 +4,27 @@ import com.example.qaapp.dto.*;
 import com.example.qaapp.service.AiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/ai")
 @RequiredArgsConstructor
-//@CrossOrigin("*")
 public class AiController {
 
     private final AiService aiService;
 
     @PostMapping("/transcribe/{fileId}")
-    public String transcribe(
+    public Map<String, String> transcribe(
             @PathVariable Long fileId) {
 
-        return aiService.transcribe(fileId);
+        String transcript =
+                aiService.transcribe(fileId);
+
+        return Map.of(
+                "transcript", transcript
+        );
     }
 
     @PostMapping("/ask")

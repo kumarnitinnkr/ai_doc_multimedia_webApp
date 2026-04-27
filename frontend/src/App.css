@@ -1,38 +1,116 @@
-.App {
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+h1 {
   text-align: center;
+  color: #1f2937;
+  margin-bottom: 10px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 30px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+h2 {
+  margin-top: 0;
+  color: #111827;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
   color: white;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+  margin-top: 8px;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background: #1d4ed8;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.btnRow,
+.inputRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inputRow input {
+  flex: 1;
+}
+
+.status {
+  margin-top: 12px;
+  font-weight: bold;
+  color: #16a34a;
+}
+
+.smallText {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.resultBox,
+.qaBox {
+  background: #f9fafb;
+  border-left: 4px solid #2563eb;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+.answer {
+  border-left: 4px solid #16a34a;
+}
+
+.mediaBox {
+  width: 100%;
+  margin-bottom: 22px;
+  border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+  .btnRow,
+  .inputRow {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  button {
+    width: 100%;
+    margin-right: 0;
   }
 }
